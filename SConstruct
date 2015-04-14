@@ -48,7 +48,7 @@ vars.Save( "build-setup.conf", envToSave )
 
 # Compile part
 
-env.ParseConfig( 'pkg-config --cflags --libs poppler-glib gthread-2.0 gtk+-2.0' )
+env.ParseConfig( 'pkg-config --cflags --libs poppler-glib gthread-2.0 gtk+-2.0 expat' )
 env.Append( CPPPATH = 'objs' )
 
 if env[ "RELEASE" ] :

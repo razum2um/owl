@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+TryExec=owl
+Encoding=UTF-8
+Name=Owl
+GenericName=PDF reader
+Exec=owl
+Terminal=false
+Categories=Application;Office
+MimeType=application/pdf
+Comment=PDF reader
+Type=Application

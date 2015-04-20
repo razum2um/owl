@@ -210,7 +210,7 @@ void pdf_info_show_properties( document_t* document ) {
     font_info = poppler_font_info_new( document->doc );
     error = poppler_font_info_scan( font_info, document_get_page_count( document ), &font_iter );
 
-    if ( error == FALSE ) {
+    if ( error == FALSE || !font_iter ) {
         goto display;
     }
 

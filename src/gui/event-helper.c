@@ -558,11 +558,7 @@ void do_save_selection_as_text( pdf_tab_t* pdf_tab, document_t* document ) {
             rect.y2 = tmp;
         }
 
-#if POPPLER_MINOR_VERSION >= 16
         text = poppler_page_get_selected_text(
-#else
-        text = poppler_page_get_text(
-#endif
             page->page,
             POPPLER_SELECTION_GLYPH,
             &rect

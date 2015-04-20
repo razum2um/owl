@@ -63,7 +63,7 @@ typedef struct {
     int pending_request;
 
     GThread* find_thread;
-    GMutex* find_lock;
+    GMutex find_lock;
     GCond* find_cond;
 } find_context_t;
 

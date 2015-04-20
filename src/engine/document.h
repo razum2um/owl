@@ -68,13 +68,13 @@ typedef struct document {
 
     GThread* open_thread;
     open_listener_t* open_listener;
-    GMutex* reload_lock;
+    GMutex reload_lock;
 
     /* Pages :) */
 
     int page_count;
     page_t* page_table;
-    GMutex* page_lock;
+    GMutex page_lock;
 
     /* Poppler document stuffs */
 

@@ -57,39 +57,26 @@ document_t* document_new( const char* filename ) {
         goto error2;
     }
 
-    doc->page_lock = g_mutex_new();
-
-    if ( doc->page_lock == NULL ) {
-        goto error2;
-    }
-
-    doc->reload_lock = g_mutex_new();
-
-    if ( doc->reload_lock == NULL ) {
-        goto error3;
-    }
+    g_mutex_init(&doc->page_lock);
+    g_mutex_init(&doc->reload_lock);
 
     doc->render_engine = render_engine_new( doc );
 
     if ( doc->render_engine == NULL ) {
-        goto error4;
+        goto error2;
     }
 
     doc->match_table = g_hash_table_new_full( g_str_hash, g_str_equal, g_free, NULL );
 
     if ( doc->match_table == NULL ) {
-        goto error4;
+        goto error2;
     }
 
     return doc;
 
- error4:
-    g_mutex_free( doc->reload_lock );
-
- error3:
-    g_mutex_free( doc->page_lock );
-
  error2:
+    g_mutex_clear( &doc->reload_lock );
+    g_mutex_clear( &doc->page_lock );
     free( doc->path );
     free( doc->filename );
 
@@ -149,8 +136,8 @@ void document_destroy( document_t* doc ) {
         doc->page_table = NULL;
     }
 
-    g_mutex_free( doc->page_lock );
-    g_mutex_free( doc->reload_lock );
+    g_mutex_clear( &doc->page_lock );
+    g_mutex_clear( &doc->reload_lock );
 
     /* Destroy the poppler document */
 
@@ -394,7 +381,7 @@ static gpointer document_reload_thread( gpointer arg ) {
 
     doc = ( document_t* )arg;
 
-    g_mutex_lock( doc->reload_lock );
+    g_mutex_lock( &doc->reload_lock );
 
     /* Stop the render engine */
 
@@ -458,7 +445,7 @@ static gpointer document_reload_thread( gpointer arg ) {
 
     NOTIFY_OPEN_LISTENER( DOC_RELOAD_DONE_OK );
 
-    g_mutex_unlock( doc->reload_lock );
+    g_mutex_unlock( &doc->reload_lock );
 
     return NULL;
 
@@ -479,7 +466,7 @@ static gpointer document_reload_thread( gpointer arg ) {
 
 #undef NOTIFY_OPEN_LISTENER
 
-    g_mutex_unlock( doc->reload_lock );
+    g_mutex_unlock( &doc->reload_lock );
 
     document_destroy_page_table( page_table, page_count );
     free( page_table );
@@ -544,7 +531,7 @@ int document_reverse_pages( document_t* document ) {
     int i;
     page_t page;
 
-    g_mutex_lock( document->page_lock );
+    g_mutex_lock( &document->page_lock );
 
     for ( i = 0; i < document->page_count / 2; i++ ) {
         memcpy(
@@ -564,7 +551,7 @@ int document_reverse_pages( document_t* document ) {
         );
     }
 
-    g_mutex_unlock( document->page_lock );
+    g_mutex_unlock( &document->page_lock );
 
     return 0;
 }
@@ -611,7 +598,7 @@ cairo_surface_t* document_get_page_surface( document_t* document, int index ) {
         return NULL;
     }
 
-    g_mutex_lock( document->page_lock );
+    g_mutex_lock( &document->page_lock );
 
     surface = document->page_table[ index ].surf;
 
@@ -619,7 +606,7 @@ cairo_surface_t* document_get_page_surface( document_t* document, int index ) {
         cairo_surface_reference( surface );
     }
 
-    g_mutex_unlock( document->page_lock );
+    g_mutex_unlock( &document->page_lock );
 
     return surface;
 }
@@ -798,7 +785,7 @@ int document_set_page_surface( document_t* document, int index, cairo_surface_t*
         return -EINVAL;
     }
 
-    g_mutex_lock( document->page_lock );
+    g_mutex_lock( &document->page_lock );
 
     tmp = document->page_table[ index ].surf;
 
@@ -808,7 +795,7 @@ int document_set_page_surface( document_t* document, int index, cairo_surface_t*
 
     document->page_table[ index ].surf = surface;
 
-    g_mutex_unlock( document->page_lock );
+    g_mutex_unlock( &document->page_lock );
 
     return 0;
 }
@@ -817,7 +804,7 @@ int document_set_rendered_region( document_t* document, int start_index, int end
     int i;
     page_t* page;
 
-    g_mutex_lock( document->page_lock );
+    g_mutex_lock( &document->page_lock );
 
     /* Clean up pages before the region */
 
@@ -837,7 +824,7 @@ int document_set_rendered_region( document_t* document, int start_index, int end
         }
     }
 
-    g_mutex_unlock( document->page_lock );
+    g_mutex_unlock( &document->page_lock );
 
     return 0;
 }

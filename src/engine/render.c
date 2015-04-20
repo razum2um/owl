@@ -115,11 +115,11 @@ static void* render_thread_entry( void* arg ) {
         int lazy_rendering;
         render_command_t* cur_cmd;
 
-        g_mutex_lock( engine->lock );
+        g_mutex_lock( &engine->lock );
 
         while ( engine->running &&
                 engine->command_queue_head == NULL ) {
-            g_cond_wait( engine->queue_sync, engine->lock );
+            g_cond_wait( engine->queue_sync, &engine->lock );
         }
 
         if ( engine->command_queue_head != NULL ) {
@@ -133,7 +133,7 @@ static void* render_thread_entry( void* arg ) {
             cur_cmd = NULL;
         }
 
-        g_mutex_unlock( engine->lock );
+        g_mutex_unlock( &engine->lock );
 
         if ( !engine->running ) {
             break;
@@ -180,26 +180,19 @@ render_engine_t* render_engine_new( document_t* doc ) {
 
     memset( engine, 0, sizeof( render_engine_t ) );
 
-    engine->lock = g_mutex_new();
-
-    if ( engine->lock == NULL ) {
-        goto error2;
-    }
-
+    g_mutex_init(&engine->lock);
     engine->queue_sync = g_cond_new();
 
     if ( engine->queue_sync == NULL ) {
-        goto error3;
+        goto error2;
     }
 
     engine->doc = doc;
 
     return engine;
 
- error3:
-    g_mutex_free( engine->lock );
-
  error2:
+    g_mutex_clear( &engine->lock );
     free( engine );
 
  error1:
@@ -207,7 +200,7 @@ render_engine_t* render_engine_new( document_t* doc ) {
 }
 
 void render_engine_destroy( render_engine_t* engine ) {
-    g_mutex_free( engine->lock );
+    g_mutex_clear( &engine->lock );
     g_cond_free( engine->queue_sync );
 
     free( engine );
@@ -242,14 +235,14 @@ int render_engine_stop( render_engine_t* engine, int wait ) {
 int render_engine_flush_queue( render_engine_t* engine ) {
     render_command_t* head;
 
-    g_mutex_lock( engine->lock );
+    g_mutex_lock( &engine->lock );
 
     head = engine->command_queue_head;
 
     engine->command_queue_head = NULL;
     engine->command_queue_tail = NULL;
 
-    g_mutex_unlock( engine->lock );
+    g_mutex_unlock( &engine->lock );
 
     while ( head != NULL ) {
         render_command_t* cmd;
@@ -266,7 +259,7 @@ int render_engine_flush_queue( render_engine_t* engine ) {
 int render_engine_queue_command( render_engine_t* engine, render_command_t* cmd ) {
     cmd->next = NULL;
 
-    g_mutex_lock( engine->lock );
+    g_mutex_lock( &engine->lock );
 
     if ( engine->command_queue_head == NULL ) {
         engine->command_queue_head = cmd;
@@ -276,7 +269,7 @@ int render_engine_queue_command( render_engine_t* engine, render_command_t* cmd 
         engine->command_queue_tail = cmd;
     }
 
-    g_mutex_unlock( engine->lock );
+    g_mutex_unlock( &engine->lock );
     g_cond_signal( engine->queue_sync );
 
     return 0;

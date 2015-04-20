@@ -39,7 +39,7 @@ typedef struct render_engine {
     volatile int running;
     GThread* render_thread;
 
-    GMutex* lock;
+    GMutex lock;
     GCond* queue_sync;
     render_command_t* command_queue_head;
     render_command_t* command_queue_tail;

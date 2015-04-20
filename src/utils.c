@@ -32,22 +32,22 @@
 #include <config/settings.h>
 
 /* Poppler is not thread safe. What an epic failure. */
-static GMutex* big_poppler_lock;
+static GMutex big_poppler_lock;
 
 void init_poppler_lock( void ) {
-    big_poppler_lock = g_mutex_new();
+	g_mutex_init(&big_poppler_lock);
 }
 
 void destroy_poppler_lock( void ) {
-    g_mutex_free( big_poppler_lock );
+    g_mutex_clear( &big_poppler_lock );
 }
 
 void poppler_lock( void ) {
-    g_mutex_lock( big_poppler_lock );
+    g_mutex_lock( &big_poppler_lock );
 }
 
 void poppler_unlock( void ) {
-    g_mutex_unlock( big_poppler_lock );
+    g_mutex_unlock( &big_poppler_lock );
 }
 
 int normalize_angle( int angle ) {

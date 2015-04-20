@@ -131,7 +131,7 @@ void pdf_info_show_properties( document_t* document ) {
     gchar* keywords;
     gchar* creator;
     gchar* producer;
-    gchar* linearized;
+    gboolean linearized;
     gchar* metadata;
     GTime creation_date;
     GTime mod_date;
@@ -203,14 +203,14 @@ void pdf_info_show_properties( document_t* document ) {
     table_append_row( table, "Creator:", creator, &row, ROW_TYPE_LABEL );
     table_append_row( table, "Producer:", producer, &row, ROW_TYPE_LABEL );
     table_append_row( table, "Format:", format, &row, ROW_TYPE_LABEL );
-    table_append_row( table, "Linearized:", linearized, &row, ROW_TYPE_LABEL );
+    table_append_row( table, "Linearized:", linearized ? "yes":"no", &row, ROW_TYPE_LABEL );
 
     /* font info */
 
     font_info = poppler_font_info_new( document->doc );
     error = poppler_font_info_scan( font_info, document_get_page_count( document ), &font_iter );
 
-    if ( error == FALSE ) {
+    if ( error == FALSE || !font_iter ) {
         goto display;
     }
 
@@ -317,6 +317,5 @@ void pdf_info_show_properties( document_t* document ) {
     g_free( keywords );
     g_free( creator );
     g_free( producer );
-    g_free( linearized );
     g_free( metadata );
 }

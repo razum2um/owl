@@ -119,7 +119,7 @@ static void* render_thread_entry( void* arg ) {
 
         while ( engine->running &&
                 engine->command_queue_head == NULL ) {
-            g_cond_wait( engine->queue_sync, &engine->lock );
+            g_cond_wait( &engine->queue_sync, &engine->lock );
         }
 
         if ( engine->command_queue_head != NULL ) {
@@ -175,33 +175,21 @@ render_engine_t* render_engine_new( document_t* doc ) {
     engine = ( render_engine_t* )malloc( sizeof( render_engine_t ) );
 
     if ( engine == NULL ) {
-        goto error1;
+        return NULL;
     }
 
     memset( engine, 0, sizeof( render_engine_t ) );
 
     g_mutex_init(&engine->lock);
-    engine->queue_sync = g_cond_new();
-
-    if ( engine->queue_sync == NULL ) {
-        goto error2;
-    }
-
+    g_cond_init(&engine->queue_sync);
     engine->doc = doc;
 
     return engine;
-
- error2:
-    g_mutex_clear( &engine->lock );
-    free( engine );
-
- error1:
-    return NULL;
 }
 
 void render_engine_destroy( render_engine_t* engine ) {
     g_mutex_clear( &engine->lock );
-    g_cond_free( engine->queue_sync );
+    g_cond_clear( &engine->queue_sync );
 
     free( engine );
 }
@@ -222,7 +210,7 @@ int render_engine_start( render_engine_t* engine ) {
 int render_engine_stop( render_engine_t* engine, int wait ) {
     engine->running = FALSE;
 
-    g_cond_signal( engine->queue_sync );
+    g_cond_signal( &engine->queue_sync );
 
     if ( ( wait ) &&
          ( engine->render_thread != NULL ) ) {
@@ -270,7 +258,7 @@ int render_engine_queue_command( render_engine_t* engine, render_command_t* cmd 
     }
 
     g_mutex_unlock( &engine->lock );
-    g_cond_signal( engine->queue_sync );
+    g_cond_signal( &engine->queue_sync );
 
     return 0;
 }

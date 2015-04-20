@@ -64,7 +64,7 @@ typedef struct {
 
     GThread* find_thread;
     GMutex find_lock;
-    GCond* find_cond;
+    GCond find_cond;
 } find_context_t;
 
 find_context_t* find_context_new( struct document* doc, int page_index, const char* text );

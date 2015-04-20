@@ -60,7 +60,7 @@ static gpointer find_thread_entry( gpointer arg ) {
         g_mutex_lock( &fc->find_lock );
 
         if ( !fc->pending_request ) {
-            g_cond_wait( fc->find_cond, &fc->find_lock );
+            g_cond_wait( &fc->find_cond, &fc->find_lock );
         }
 
         fc->pending_request = 0;
@@ -236,19 +236,11 @@ find_context_t* find_context_new( document_t* doc, int page_index, const char* t
     }
 
     g_mutex_init(&fc->find_lock);
-    fc->find_cond = g_cond_new();
-
-    if ( fc->find_cond == NULL ) {
-        goto error3;
-    }
+    g_cond_init(&fc->find_cond);
 
     find_start( fc );
 
     return fc;
-
- error3:
-    g_mutex_clear( &fc->find_lock );
-    free( fc->text );
 
  error2:
     free( fc );
@@ -259,7 +251,7 @@ find_context_t* find_context_new( document_t* doc, int page_index, const char* t
 
 static void find_context_destroy( find_context_t* fc ) {
     g_mutex_clear( &fc->find_lock );
-    g_cond_free( fc->find_cond );
+    g_cond_clear( &fc->find_cond );
 
     free( fc->text );
     free( fc );
@@ -272,11 +264,11 @@ void find_push( find_context_t* fc, find_dir_t direction ) {
     fc->pending_request = 1;
 
     g_mutex_unlock( &fc->find_lock );
-    g_cond_signal( fc->find_cond );
+    g_cond_signal( &fc->find_cond );
 }
 
 void find_stop( find_context_t* fc ) {
     fc->running = 0;
 
-    g_cond_signal( fc->find_cond );
+    g_cond_signal( &fc->find_cond );
 }

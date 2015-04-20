@@ -1,0 +1,62 @@
+#+TITLE: Owl PDF viewer
+
+* Introduction
+
+*Owl* is a fast and minimal PDF viewer offering unique but highly
+useful features. It runs on Linux and should be easily portable to
+other platforms.
+
+A few reasons why you should care about Owl:
+- ultra-fast rendering with a lightweight memory footprint
+- tabbed view for multiple simultaneously open documents
+- presentation mode (fullscreen view)
+- view multiple pages (up to 5) in a row
+- rotate selected pages or all pages however you want them
+- no clutter, no bloatware, no malware
+- free software (GPL)
+
+Owl uses the =poppler= library for PDF decoding with =cairo= as image
+rendering backend. The =glib=, =gtk= and =expat= libraries are also
+used.
+
+* Obtaining Owl
+
+** Get the source
+
+The source is maintained in git, hosted at GitHub. To clone the repository:
+
+: git clone https://github.com/tomszilagyi/owl.git
+
+** Dependencies
+
+This is everything needed to be able to install =owl= on a machine
+freshly installed with current Debian jessie (testing):
+
+: $ sudo apt-get install build-essentials pkg-config scons libgtk2.0-dev libpoppler-glib-dev
+
+Note that the listed development packages will pull in their
+respective 'main' packages which have been omitted for this reason.
+
+For other distributions, please consult their respective package
+managers. With recent Debian-based distros (Ubuntu etc.) the above
+should be very close to what you actually need.
+
+** Building
+
+Once all dependency packages have been installed, compilation is easy
+via SCons:
+
+: $ scons
+
+This should build the =owl= executable. To install system-wide:
+
+: $ sudo scons install
+
+Note: installation is needed so that the icons will be found in one of
+the standard system-wide places. If you run the program locally on a
+machine where you have never installed owl, the toolbar icons will be
+missing.
+
+Should you need to clean up after a build, do this:
+
+: $ scons -c

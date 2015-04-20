@@ -66,35 +66,22 @@ void ref_parse_from_action( ref_t* ref, PopplerDocument* doc, PopplerAction* act
             if ( follow && ref->goto_dest != NULL ) {
                 ref->goto_dest( ref->page_num, ref->goto_dest_data );
             }
-
-            break;
-
-        case POPPLER_ACTION_GOTO_REMOTE :
-            break;
-
-        case POPPLER_ACTION_LAUNCH :
             break;
 
         case POPPLER_ACTION_URI :
             if ( follow && ref->goto_uri != NULL ) {
                 ref->goto_uri( action->uri.uri );
             }
-
             break;
 
+        case POPPLER_ACTION_GOTO_REMOTE :
+        case POPPLER_ACTION_LAUNCH :
         case POPPLER_ACTION_NAMED :
-            break;
-
         case POPPLER_ACTION_MOVIE :
-            break;
-
-#if POPPLER_MINOR_VERSION >= 16
         case POPPLER_ACTION_RENDITION :
-            break;
-
         case POPPLER_ACTION_OCG_STATE :
+        case POPPLER_ACTION_JAVASCRIPT :
             break;
-#endif
 
         case POPPLER_ACTION_UNKNOWN :
             printf( "unknown action\n" );

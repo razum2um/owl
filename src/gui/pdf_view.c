@@ -587,13 +587,10 @@ static gboolean pdfview_expose( GtkWidget* widget, GdkEventExpose* event ) {
 }
 
 static gboolean pdfview_scroll( GtkWidget* widget, GdkEventScroll* event ) {
-    GtkPdfView* pdf_view;
     pdf_tab_t* pdf_tab;
 
     g_return_val_if_fail( widget != NULL, FALSE );
     g_return_val_if_fail( GTK_IS_PDFVIEW( widget ), FALSE );
-
-    pdf_view = GTK_PDFVIEW( widget );
 
     pdf_tab = document_storage_get_tab_by_pdfview( widget );
 
@@ -1185,13 +1182,11 @@ static gboolean pdfview_motion_notify( GtkWidget* widget, GdkEventMotion* event 
 }
 
 static void pdfview_destroy( GtkObject* object ) {
-    GtkPdfView* pdfview;
     GtkPdfViewClass* class;
 
     g_return_if_fail( object != NULL );
     g_return_if_fail( GTK_IS_PDFVIEW( object ) );
 
-    pdfview = GTK_PDFVIEW( object );
     class = gtk_type_class( gtk_widget_get_type() );
 
     if ( GTK_OBJECT_CLASS( class )->destroy ) {

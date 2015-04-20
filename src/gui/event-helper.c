@@ -155,9 +155,7 @@ void do_save_document( document_t* document, char* uri ) {
         }
 
         if ( size > 0 ) {
-            size_t dummy;
-
-            dummy = fwrite( buffer, 1, size, new_file );
+            fwrite( buffer, 1, size, new_file );
         }
     } while ( size == sizeof( buffer ) );
 
@@ -218,7 +216,6 @@ void do_update_zoom_entry( pdf_tab_t* pdf_tab, document_t* document ) {
 
 void do_update_render_region( pdf_tab_t* pdf_tab, document_t* document, int lazy_rendering ) {
     int i;
-    int page_count;
     int current_page;
     int doc_page_count;
     render_command_t* cmd;
@@ -247,7 +244,6 @@ void do_update_render_region( pdf_tab_t* pdf_tab, document_t* document, int lazy
     settings_get_int( "render-limit-mb", &max_cache_memory );
     max_cache_memory *= 1024 * 1024;
 
-    page_count = 1;
     current_page = gtk_pdfview_get_current_page( pdf_tab->pdf_view );
     doc_page_count = document_get_page_count( document );
 

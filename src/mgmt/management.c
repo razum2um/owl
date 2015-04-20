@@ -422,10 +422,9 @@ static gpointer mgmt_thread_entry( gpointer data ) {
 }
 
 int start_management_port( void ) {
-    mgmt_thread = g_thread_create(
+    mgmt_thread = g_thread_new(
+	"mgmt",
         mgmt_thread_entry,
-        NULL,
-        TRUE,
         NULL
     );
 

@@ -356,11 +356,10 @@ static gpointer document_open_thread( gpointer arg ) {
 }
 
 int document_start_open( document_t* document ) {
-    document->open_thread = g_thread_create(
+    document->open_thread = g_thread_new(
+	"document-open",
         document_open_thread,
-        ( gpointer )document,
-        TRUE,
-        NULL
+        ( gpointer )document
     );
 
     return 0;
@@ -475,11 +474,10 @@ static gpointer document_reload_thread( gpointer arg ) {
 }
 
 int document_do_reload( document_t* document ) {
-    document->open_thread = g_thread_create(
+    document->open_thread = g_thread_new(
+	"document-reload",
         document_reload_thread,
-        ( gpointer )document,
-        TRUE,
-        NULL
+        ( gpointer )document
     );
 
     return 0;

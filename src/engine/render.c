@@ -197,11 +197,10 @@ void render_engine_destroy( render_engine_t* engine ) {
 int render_engine_start( render_engine_t* engine ) {
     engine->running = TRUE;
 
-    engine->render_thread = g_thread_create(
+    engine->render_thread = g_thread_new(
+        "render",
         render_thread_entry,
-        ( gpointer )engine,
-        TRUE,
-        NULL
+        ( gpointer )engine
     );
 
     return 0;

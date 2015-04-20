@@ -37,11 +37,10 @@ static find_result_t find_next( find_context_t* fc );
 static void find_start( find_context_t* fc ) {
     fc->running = TRUE;
 
-    fc->find_thread = g_thread_create(
+    fc->find_thread = g_thread_new(
+	"find",
         find_thread_entry,
-        ( gpointer )fc,
-        TRUE,
-        NULL
+        ( gpointer )fc
     );
 }
 

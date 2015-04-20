@@ -731,7 +731,7 @@ void event_save_selection_as_image( gpointer data ) {
         g_free( filename );
     }
 
-    gdk_pixbuf_unref( pixbuf );
+    g_object_unref( pixbuf );
 
     gtk_widget_destroy( dialog );
 }

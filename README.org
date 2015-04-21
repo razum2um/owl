@@ -1,8 +1,8 @@
-#+TITLE: Owl PDF viewer
+#+TITLE: Owl PDF reader
 
 * Introduction
 
-*Owl* is a fast and minimal PDF viewer offering unique but highly
+*Owl* is a fast and minimal PDF reader offering unique but highly
 useful features. It runs on Linux and should be easily portable to
 other platforms.
 

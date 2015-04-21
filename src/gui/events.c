@@ -768,8 +768,8 @@ static const char* poppler_backend( void ) {
 
 void event_show_about( GtkWidget* widget, gpointer data ) {
     GtkWidget* about;
-    char text[ 256 ];
-    char path[ 256 ];
+    gchar *text;
+    gchar *path;
 
     about = gtk_message_dialog_new_with_markup(
         GTK_WINDOW( main_window ),
@@ -779,34 +779,28 @@ void event_show_about( GtkWidget* widget, gpointer data ) {
         NULL
     );
 
-    snprintf(
-        text,
-        sizeof( text ),
+    text = g_strdup_printf(
         "<big><b>Owl PDF reader " OWL_VERSION "</b></big>\n\n"
-        "Developers: Peter Szilagyi, Zoltan Kovacs\n\n"
-        "Poppler version: %s\n"
-        "Poppler backend: %s",
+        "<b>Developers:</b>\n"
+	"2009-2011:\tPeter Szilagyi, Zoltan Kovacs\n"
+	"2015-present:\tTom Szilagyi\n\n"
+        "Poppler version:\t<b>%s</b>\n"
+        "Poppler backend:\t<b>%s</b>",
         poppler_get_version(),
         poppler_backend()
     );
 
     gtk_message_dialog_set_markup( GTK_MESSAGE_DIALOG( about ), text );
+    g_free(text);
 
     gtk_window_set_title( GTK_WINDOW( about ), "Owl - About" );
 
-    snprintf(
-        path,
-        sizeof( path ),
-        "%s%spixmaps%sicon-128.png",
-        OWL_INSTALL_PATH,
-        PATH_SEPARATOR,
-        PATH_SEPARATOR
-    );
-
+    path = g_build_filename(OWL_INSTALL_PATH, "pixmaps", "icon-128.png", NULL);
     gtk_message_dialog_set_image(
         GTK_MESSAGE_DIALOG( about ),
         gtk_image_new_from_file( path )
     );
+    g_free(path);
 
     gtk_widget_show_all( about );
 

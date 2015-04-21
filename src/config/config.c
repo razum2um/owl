@@ -30,29 +30,18 @@
 static char* config_directory = NULL;
 
 static int init_config_directory( void ) {
-    char* home;
-    char path[ 256 ];
     struct stat st;
 
     /* Find out the correct path for the config directory */
 
-    home = getenv( "HOME" );
-
-    if ( home == NULL ) {
-        return -1;
-    }
-
-    snprintf( path, sizeof( path ), "%s%s.owl", home, PATH_SEPARATOR );
-
-    config_directory = strdup( path );
-
+    config_directory = g_build_filename(g_get_user_config_dir(), "owl", NULL);
     if ( config_directory == NULL ) {
         return -1;
     }
 
     /* Create the config directory if it doesn't exist */
 
-    if ( stat( config_directory, &st ) != 0 ) {
+    if ( g_stat( config_directory, &st ) != 0 ) {
         g_mkdir( config_directory, 0700 );
     }
 

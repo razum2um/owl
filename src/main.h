@@ -19,7 +19,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-#define OWL_VERSION "0.2"
+#define OWL_VERSION "0.2.1"
 
 void exit_application( void );
 

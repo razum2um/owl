@@ -9,9 +9,12 @@ other platforms.
 A few reasons why you should care about Owl:
 - ultra-fast rendering with a lightweight memory footprint
 - tabbed view for multiple simultaneously open documents
+- per-page zoom/rotate capability
+- single page / continuous page mode
 - presentation mode (fullscreen view)
-- view multiple pages (up to 5) in a row
-- rotate selected pages or all pages however you want them
+- view multiple pages (up to 5) side by side
+- search without popup window
+- save selected rectangle as image or text
 - no clutter, no bloatware, no malware
 - free software (GPL)
 
@@ -60,3 +63,16 @@ missing.
 Should you need to clean up after a build, do this:
 
 : $ scons -c
+* Planned changes
+
+Feel free to implement any of this and send a pull request.
+
+- show/hide navigation bar and toolbar: move these options to View
+  menu from Settings/Appearance, and add keyboard shortcuts as well
+  (Ctrl+N and Ctrl+T)
+
+- Finding with Ctrl+F:
+  - add menu option to reach this without shortcut (View/Find bar,
+    along with the menu options to show/hide other bars)
+  - integrate this with navigation bar
+  - use stock icons instead of Back and Forward to save screen space

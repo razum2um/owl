@@ -728,11 +728,13 @@ static gboolean pdfview_key_press( GtkWidget* widget, GdkEventKey* event ) {
             break;
 
         case GDK_Left :
-            doctab_h_adjustment_add_value( pdf_tab, -STEP_INCREMENT );
+            // doctab_h_adjustment_add_value( pdf_tab, -STEP_INCREMENT );
+            pdfview_goto_page( pdf_view, -1, 0.0, TRUE, FALSE );
             break;
 
         case GDK_Right :
-            doctab_h_adjustment_add_value( pdf_tab, STEP_INCREMENT );
+            // doctab_h_adjustment_add_value( pdf_tab, STEP_INCREMENT );
+            pdfview_goto_page( pdf_view, 1, 0.0, TRUE, FALSE );
             break;
 
         case GDK_space :

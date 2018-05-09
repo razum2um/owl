@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 
 #include <storage.h>
-#include <watcher.h>
+// #include <watcher.h>
 #include <utils.h>
 #include <main.h>
 #include <gui/main_wnd.h>
@@ -118,7 +118,7 @@ void exit_application( void ) {
 
     /* Stop the file watcher thread */
 
-    stop_watcher_thread();
+    // stop_watcher_thread();
 
     /* Stop the rendering engines */
 
@@ -215,7 +215,7 @@ int main( int argc, char** argv ) {
 
     init_history();
     init_print();
-    init_watcher_thread();
+    // init_watcher_thread();
     init_document_storage();
     init_stock_icons();
     init_main_window();

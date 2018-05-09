@@ -295,7 +295,7 @@ static int mgmt_handle_client_data( mgmt_client_t* client ) {
     size_t new_size;
     char buffer[ 512 ];
 
-    result = recv( client->socket, buffer, sizeof( buffer ), MSG_NOSIGNAL );
+    result = recv( client->socket, buffer, sizeof( buffer ), 0 ); // 0 = MSG_NOSIGNAL, no on osx
 
     if ( result <= 0 ) {
         goto error;

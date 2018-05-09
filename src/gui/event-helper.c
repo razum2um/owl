@@ -22,7 +22,7 @@
 
 #include <storage.h>
 #include <utils.h>
-#include <watcher.h>
+// #include <watcher.h>
 #include <gui/events.h>
 #include <gui/pdf_view.h>
 #include <gui/main_wnd.h>
@@ -317,7 +317,7 @@ void do_close_document_tab( pdf_tab_t* pdf_tab, document_t* document, int page_i
 
     snprintf( path, sizeof( path ), "%s%s%s", document->path, PATH_SEPARATOR, document->filename );
 
-    watcher_remove_document( document );
+    // watcher_remove_document( document );
 
     /* Update document history */
 

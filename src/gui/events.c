@@ -26,7 +26,7 @@
 
 #include <utils.h>
 #include <storage.h>
-#include <watcher.h>
+// #include <watcher.h>
 #include <main.h>
 #include <gui/events.h>
 #include <gui/doc_tab.h>
@@ -473,7 +473,7 @@ static void event_document_open_ok( document_t* doc ) {
 
     GDK_THREADS_LEAVE();
 
-    watcher_add_document( doc );
+    // watcher_add_document( doc );
 }
 
 static void event_document_open_failed( document_t* document ) {

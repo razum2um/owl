@@ -48,7 +48,7 @@ vars.Save( "build-setup.conf", envToSave )
 
 # Compile part
 
-env.ParseConfig( 'pkg-config --cflags --libs poppler-glib gthread-2.0 gtk+-2.0 expat' )
+env.ParseConfig( 'PKG_CONFIG_PATH=/usr/local/opt/expat/lib/pkgconfig pkg-config --cflags --libs poppler-glib gthread-2.0 gtk+-2.0 expat' )
 env.Append( CPPPATH = 'objs' )
 
 if env[ "RELEASE" ] :
@@ -56,7 +56,7 @@ if env[ "RELEASE" ] :
     env[ 'CPPFLAGS' ] = '-g -O2 -Wall'
 else :
     print "Debug build"
-    env[ 'CPPFLAGS' ] = '-g -ggdb -O0 -rdynamic -Wall'
+    env[ 'CPPFLAGS' ] = '-g -ggdb -O0 -Wall' # no -rdynamic on clang
 
 env[ 'CPPDEFINES' ] = '-DOWL_INSTALL_PATH="\\"' + env[ "PREFIX" ] + '/share/owl' +  '\\""'
 
